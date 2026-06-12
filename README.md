@@ -53,9 +53,11 @@ Override with `HOLIX_LINK_HOME`.
 | `holix-link disconnect` | Revoke local credentials |
 | `holix-link install-service` | User-level autostart (systemd / LaunchAgent / Task Scheduler) |
 
-## Design
+## Documentation
 
-See [Holix design doc](https://github.com/javded-itres/Holix/blob/feature/remote-folder-agent/docs/design/REMOTE_FOLDER_AGENT.md).
+- **User guide (EN/RU):** [Holix LINK.md](https://github.com/javded-itres/Holix/blob/feature/remote-folder-agent/docs/en/LINK.md)
+- **Design:** [REMOTE_FOLDER_AGENT.md](https://github.com/javded-itres/Holix/blob/feature/remote-folder-agent/docs/design/REMOTE_FOLDER_AGENT.md)
+- **On docs site:** run `holix docs build` on the server, then open `/docs/link`
 
 ## License
 
