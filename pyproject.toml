@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Holix-Link"
+version = "0.1.0"
+description = "Lightweight Holix Link client — remote folder access behind NAT"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "Pavel Lukyanov" }]
+keywords = ["holix", "remote", "filesystem", "nat", "websocket"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Topic :: System :: Networking",
+]
+dependencies = [
+    "cryptography>=42.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.0",
+    "rich>=13.0.0",
+    "typer>=0.9.0",
+    "websockets>=13.0",
+]
+
+[project.optional-dependencies]
+windows = ["pywin32>=306"]
+
+[project.scripts]
+holix-link = "holix_link.cli.main:app"
+
+[project.urls]
+Homepage = "https://holix-agent.ru"
+Repository = "https://github.com/javded-itres/Holix-Link"
+Issues = "https://github.com/javded-itres/Holix-Link/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["holix_link"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
