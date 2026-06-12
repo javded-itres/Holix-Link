@@ -12,9 +12,10 @@ from rich.prompt import Confirm
 from holix_link import __version__
 from holix_link.config import clear_paired_config, get_link_home, load_config
 from holix_link.credentials import clear_credentials, load_credentials
-from holix_link.daemon import is_daemon_running, run_daemon
+from holix_link.daemon import is_daemon_running, run_daemon, stop_daemon
 from holix_link.pairing import PairingError, exchange_pair_code, fingerprint_trusted
 from holix_link.server import ServerUrlError
+from holix_link.service import ServiceError, install_service, uninstall_service
 
 app = typer.Typer(
     name="holix-link",
@@ -131,7 +132,7 @@ def status() -> None:
 def disconnect() -> None:
     """Disconnect and remove local credentials."""
     if is_daemon_running():
-        console.print("[yellow]Daemon is running. Stop it before disconnecting.[/yellow]")
+        console.print("[yellow]Daemon is running. Run: holix-link stop[/yellow]")
         raise typer.Exit(1)
     clear_credentials()
     clear_paired_config()
@@ -140,15 +141,34 @@ def disconnect() -> None:
 
 
 @app.command("install-service")
-def install_service() -> None:
+def install_service_cmd() -> None:
     """Install user-level autostart (systemd / LaunchAgent / Task Scheduler)."""
-    console.print("[yellow]install-service: not implemented yet (PR-5)[/yellow]")
+    try:
+        message = install_service()
+    except ServiceError as exc:
+        console.print(f"[red]Install failed:[/red] {exc}")
+        raise typer.Exit(1) from exc
+    console.print(f"[green]{message}[/green]")
 
 
 @app.command("uninstall-service")
-def uninstall_service() -> None:
+def uninstall_service_cmd() -> None:
     """Remove autostart service."""
-    console.print("[yellow]uninstall-service: not implemented yet (PR-5)[/yellow]")
+    try:
+        message = uninstall_service()
+    except ServiceError as exc:
+        console.print(f"[red]Uninstall failed:[/red] {exc}")
+        raise typer.Exit(1) from exc
+    console.print(f"[green]{message}[/green]")
+
+
+@app.command()
+def stop() -> None:
+    """Stop the background daemon."""
+    if stop_daemon():
+        console.print("[green]Daemon stop signal sent.[/green]")
+    else:
+        console.print("[dim]Daemon is not running.[/dim]")
 
 
 @app.command()

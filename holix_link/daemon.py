@@ -51,6 +51,24 @@ def clear_pid() -> None:
         path.unlink()
 
 
+def stop_daemon() -> bool:
+    """Send SIGTERM to the running daemon process."""
+    path = pid_path()
+    if not path.is_file():
+        return False
+    try:
+        pid = int(path.read_text(encoding="utf-8").strip())
+    except ValueError:
+        clear_pid()
+        return False
+    try:
+        os.kill(pid, signal.SIGTERM)
+    except OSError:
+        clear_pid()
+        return False
+    return True
+
+
 def is_daemon_running() -> bool:
     path = pid_path()
     if not path.is_file():
