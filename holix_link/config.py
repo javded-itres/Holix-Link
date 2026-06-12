@@ -20,10 +20,18 @@ class ClientNotifications(BaseModel):
 
 class ClientConfig(BaseModel):
     server_url: str = ""
+    gateway_ws_url: str = ""
     link_id: str = ""
     folder: str = ""
     folder_portable: str = ""
     notifications: ClientNotifications = Field(default_factory=ClientNotifications)
+
+
+def clear_paired_config() -> None:
+    """Remove pairing fields while keeping notification preferences."""
+    cfg = load_config()
+    notifications = cfg.notifications
+    save_config(ClientConfig(notifications=notifications))
 
 
 def get_link_home() -> Path:

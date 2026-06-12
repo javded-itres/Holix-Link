@@ -63,6 +63,11 @@ def is_unc_path(raw: str) -> bool:
     return bool(_UNC_PREFIX_RE.match(raw.strip()))
 
 
+def resolve_folder_root(path: Path) -> Path:
+    """Resolve and normalize a user-selected workspace folder."""
+    return _resolve_root(path)
+
+
 def _resolve_root(root: Path) -> Path:
     expanded = root.expanduser()
     if is_unc_path(str(expanded)):
